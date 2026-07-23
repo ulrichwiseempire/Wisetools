@@ -87,6 +87,34 @@
         .arrow { font-size: 18px; color: var(--accent); }
 
         .footer { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: auto; padding: 10px; }
+        .footer a { color: var(--text-muted); text-decoration: underline; margin-top: 5px; display: inline-block; }
+
+        /* Cookie Banner AdSense */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1e293b;
+            border-top: 2px solid var(--accent);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            z-index: 1000;
+        }
+
+        .cookie-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -105,7 +133,7 @@
         </p>
 
         <div class="menu-list">
-            <!-- Outil 1 : Calculateur de moyenne -->
+            <!-- Outil 1 -->
             <a href="calculateur.html" class="menu-item">
                 <div>
                     <div class="menu-title">📊 Calculateur de Moyenne & BAC</div>
@@ -114,7 +142,7 @@
                 <div class="arrow">→</div>
             </a>
 
-            <!-- Outil 2 : Convertisseur de devises -->
+            <!-- Outil 2 -->
             <a href="convertisseur.html" class="menu-item">
                 <div>
                     <div class="menu-title">💸 Convertisseur de Devises</div>
@@ -123,11 +151,20 @@
                 <div class="arrow">→</div>
             </a>
 
-            <!-- Outil 3 : Calculateur de salaire -->
+            <!-- Outil 3 -->
             <a href="salaire.html" class="menu-item">
                 <div>
                     <div class="menu-title">💼 Calculateur Salaire Brut / Net</div>
                     <div class="menu-desc">Estime ton salaire net après charges</div>
+                </div>
+                <div class="arrow">→</div>
+            </a>
+
+            <!-- Outil 4 -->
+            <a href="facture.html" class="menu-item">
+                <div>
+                    <div class="menu-title">🧾 Générateur de Reçu & Facture</div>
+                    <div class="menu-desc">Crée et imprime tes factures express</div>
                 </div>
                 <div class="arrow">→</div>
             </a>
@@ -138,9 +175,26 @@
     </div>
 
     <div class="footer">
-        © 2026 WiseEmpire - Tous droits réservés
+        © 2026 WiseEmpire - Tous droits réservés<br>
+        <a href="legal.html">Mentions Légales & Confidentialité</a>
     </div>
 
+    <!-- BANNIÈRE COOKIES MANDATÉE ADSENSE -->
+    <div id="cookieBanner" class="cookie-banner" style="display: none;">
+        <span>Ce site utilise des cookies pour améliorer votre expérience et diffuser des publicités adaptées.</span>
+        <button class="cookie-btn" onclick="acceptCookies()">Accepter</button>
+    </div>
+
+    <script>
+        function acceptCookies() {
+            localStorage.setItem('cookiesAccepted', 'true');
+            document.getElementById('cookieBanner').style.display = 'none';
+        }
+
+        if (!localStorage.getItem('cookiesAccepted')) {
+            document.getElementById('cookieBanner').style.display = 'flex';
+        }
+    </script>
+
 </body>
-                      </html>
-                      
+</html>
