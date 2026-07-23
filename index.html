@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiseTools 🛠️ - Calculateur de Moyenne Scolaire</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #10b981;
+            --accent-hover: #059669;
+            --input-bg: #334155;
+            --border: #475569;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
+        }
+
+        .header { text-align: center; margin-bottom: 20px; }
+        .logo { font-size: 24px; font-weight: bold; color: var(--accent); }
+        .subtitle { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+        /* Emplacement Pub pour faire du cash */
+        .ad-space {
+            width: 100%;
+            min-height: 80px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 12px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .select-group { margin-bottom: 20px; }
+        label { display: block; font-size: 14px; color: var(--text-muted); margin-bottom: 8px; }
+        select, input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: #fff;
+            padding: 12px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .subject-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .subject-row input { text-align: center; }
+
+        .btn {
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.2s;
+        }
+        .btn:hover { background: var(--accent-hover); }
+
+        .result-box {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 2px solid var(--accent);
+            border-radius: 14px;
+            text-align: center;
+        }
+
+        .result-score {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--accent);
+            margin: 5px 0;
+        }
+
+        .footer { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: auto; padding: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">WiseTools 🛠️</div>
+            <div class="subtitle">Calculateur de Moyenne Scolaire & BAC</div>
+        </div>
+
+        <!-- 💰 BANNIÈRE PUB HAUT 💰 -->
+        <div class="ad-space">
+            <!-- Remplace ce texte plus tard par ton code Google AdSense -->
+            📢 Espace Publicitaire (AdSense)
+        </div>
+
+        <div class="select-group">
+            <label for="seriesSelect">Choisis ta série ou ta classe :</label>
+            <select id="seriesSelect" onchange="chargerMatieres()">
+                <option value="D">Série D (Scientifique)</option>
+                <option value="A4">Série A4 (Littéraire)</option>
+                <option value="C">Série C (Maths/Physique)</option>
+                <option value="custom">Personnalisé</option>
+            </select>
+        </div>
+
+        <div id="subjectsContainer">
+            <!-- Les matières s'affichent automatiquement ici -->
+        </div>
+
+        <button class="btn" onclick="calculerMoyenne()">Calculer ma moyenne 📊</button>
+
+        <div id="resultBox" class="result-box">
+            <div style="font-size: 14px; color: var(--text-muted);">Ta Moyenne Générale</div>
+            <div id="finalScore" class="result-score">0.00 / 20</div>
+            <div id="appreciation" style="font-weight: 500;">---</div>
+        </div>
+
+        <!-- 💰 BANNIÈRE PUB BAS (Quand l'élève regarde son résultat) 💰 -->
+        <div class="ad-space">
+            📢 Espace Publicitaire (AdSense)
+        </div>
+    </div>
+
+    <div class="footer">
+        Projet propulsé par <b>WiseEmpire</b> 🍃
+    </div>
+
+    <script>
+        const matieresPreset = {
+            "D": [
+                { nom: "SVT", coeff: 4 },
+                { nom: "Physique-Chimie", coeff: 4 },
+                { nom: "Mathématiques", coeff: 4 },
+                { nom: "Français", coeff: 3 },
+                { nom: "Anglais", coeff: 2 },
+                { nom: "Histoire-Géo", coeff: 2 },
+                { nom: "Philosophie", coeff: 2 },
+                { nom: "ECM / EPS", coeff: 1 }
+            ],
+            "A4": [
+                { nom: "Français", coeff: 5 },
+                { nom: "Philosophie", coeff: 5 },
+                { nom: "Histoire-Géo", coeff: 4 },
+                { nom: "Anglais", coeff: 3 },
+                { nom: "Allemand / Espagnol", coeff: 3 },
+                { nom: "Mathématiques", coeff: 2 },
+                { nom: "SVT", coeff: 2 },
+                { nom: "EPS", coeff: 1 }
+            ],
+            "C": [
+                { nom: "Mathématiques", coeff: 6 },
+                { nom: "Physique-Chimie", coeff: 5 },
+                { nom: "SVT", coeff: 2 },
+                { nom: "Français", coeff: 3 },
+                { nom: "Philosophie", coeff: 2 },
+                { nom: "Anglais", coeff: 2 },
+                { nom: "Histoire-Géo", coeff: 2 }
+            ],
+            "custom": [
+                { nom: "Matière 1", coeff: 1 },
+                { nom: "Matière 2", coeff: 1 },
+                { nom: "Matière 3", coeff: 1 },
+                { nom: "Matière 4", coeff: 1 }
+            ]
+        };
+
+        function chargerMatieres() {
+            const series = document.getElementById('seriesSelect').value;
+            const container = document.getElementById('subjectsContainer');
+            container.innerHTML = '';
+
+            const list = matieresPreset[series];
+
+            // En-tête du tableau
+            const header = document.createElement('div');
+            header.className = 'subject-row';
+            header.style.fontWeight = 'bold';
+            header.style.fontSize = '12px';
+            header.style.color = 'var(--text-muted)';
+            header.innerHTML = '<div>Matière</div><div>Note /20</div><div>Coeff</div>';
+            container.appendChild(header);
+
+            list.forEach((item, index) => {
+                const row = document.createElement('div');
+                row.className = 'subject-row';
+                row.innerHTML = `
+                    <input type="text" value="${item.nom}" class="sub-name">
+                    <input type="number" step="0.25" min="0" max="20" placeholder="Ex: 14" class="sub-note">
+                    <input type="number" min="1" value="${item.coeff}" class="sub-coeff">
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function calculerMoyenne() {
+            const notes = document.querySelectorAll('.sub-note');
+            const coeffs = document.querySelectorAll('.sub-coeff');
+
+            let totalPoints = 0;
+            let totalCoeffs = 0;
+            let auMoinsUneNote = false;
+
+            for(let i = 0; i < notes.length; i++) {
+                const note = parseFloat(notes[i].value);
+                const coeff = parseFloat(coeffs[i].value);
+
+                if(!isNaN(note) && !isNaN(coeff) && coeff > 0) {
+                    totalPoints += note * coeff;
+                    totalCoeffs += coeff;
+                    auMoinsUneNote = true;
+                }
+            }
+
+            const resultBox = document.getElementById('resultBox');
+
+            if(!auMoinsUneNote || totalCoeffs === 0) {
+                alert("Entre au moins une note pour effectuer le calcul !");
+                return;
+            }
+
+            const moyenne = (totalPoints / totalCoeffs).toFixed(2);
+            document.getElementById('finalScore').innerText = `${moyenne} / 20`;
+
+            let app = "";
+            if(moyenne >= 16) app = "👑 Excellent ! Mention Très Bien";
+            else if(moyenne >= 14) app = "🌟 Très Bien ! Mention Bien";
+            else if(moyenne >= 12) app = "👍 Assez Bien ! Bon travail";
+            else if(moyenne >= 10) app = "✅ Passable. Objectif atteint !";
+            else app = "⚠️ Insuffisant. Accroche-toi !";
+
+            document.getElementById('appreciation').innerText = app;
+            resultBox.style.display = 'block';
+        }
+
+        // Chargement automatique au lancement
+        chargerMatieres();
+    </script>
+</body>
+                  </html>
+                  
