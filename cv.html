@@ -208,9 +208,10 @@
             <div class="subtitle">Générateur de CV Pro</div>
         </div>
 
+        <!-- IMPORTER LA PHOTO DEPUIS LA GALERIE -->
         <div class="form-group">
-            <label>Lien de votre photo de profil (URL / Optionnel) :</label>
-            <input type="text" id="cvPhoto" placeholder="Ex: https://via.placeholder.com/150">
+            <label>Choisir votre photo dans la galerie :</label>
+            <input type="file" id="cvPhotoInput" accept="image/*">
         </div>
 
         <div class="form-group">
@@ -225,11 +226,11 @@
 
         <div class="form-group">
             <label>Profil / À propos de moi :</label>
-            <textarea id="cvProfil" placeholder="Ex: Graphiste créatif avec plus de 5 ans d'expérience dans le design visuel..."></textarea>
+            <textarea id="cvProfil" placeholder="Ex: Graphiste créatif avec plus de 5 ans d'expérience..."></textarea>
         </div>
 
         <div class="form-group">
-            <label>Contact (Téléphone, Email, Adresse, Site Web) :</label>
+            <label>Contact (Téléphone, Email, Adresse) :</label>
             <textarea id="cvContact" placeholder="Ex: +228 97 81 73 76&#10;contact@siteweb.com&#10;Lomé, Togo"></textarea>
         </div>
 
@@ -240,17 +241,17 @@
 
         <div class="form-group">
             <label>Expériences Professionnelles :</label>
-            <textarea id="cvExp" placeholder="Ex: Responsable Design - WiseEmpire&#10;(2021 - Present)&#10;• Création de concepts visuels&#10;• Gestion de projets médias"></textarea>
+            <textarea id="cvExp" placeholder="Ex: Responsable Design - WiseEmpire&#10;(2021 - Present)"></textarea>
         </div>
 
         <div class="form-group">
             <label>Compétences / Expertise :</label>
-            <textarea id="cvSkills" placeholder="Ex: Design UI/UX&#10;Photoshop, Illustrator&#10;Design de logo"></textarea>
+            <textarea id="cvSkills" placeholder="Ex: Design UI/UX&#10;Photoshop, Illustrator"></textarea>
         </div>
 
         <div class="form-group">
             <label>Langues maîtrisées :</label>
-            <textarea id="cvLangues" placeholder="Ex: Français (Langue maternelle)&#10;Anglais (Courant)"></textarea>
+            <textarea id="cvLangues" placeholder="Ex: Français (Courant)&#10;Anglais (Intermédiaire)"></textarea>
         </div>
 
         <div class="form-group">
@@ -260,7 +261,7 @@
 
         <button class="btn" onclick="genererCV()">Générer le CV 📄</button>
 
-        <!-- ZONE DU CV MODERNE (MODEL CANVAS) -->
+        <!-- ZONE DU CV MODERNE -->
         <div id="printableCV">
             <div class="cv-grid">
                 
@@ -313,21 +314,35 @@
     </div>
 
     <script>
+        let uploadedPhotoBase64 = null;
+
+        // Écouteur d'événement pour charger la photo depuis la galerie
+        document.getElementById('cvPhotoInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    uploadedPhotoBase64 = evt.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
         function genererCV() {
             // Photo
-            const photoUrl = document.getElementById('cvPhoto').value;
-            if(photoUrl.trim() !== "") {
-                document.getElementById('outPhoto').src = photoUrl;
+            if (uploadedPhotoBase64) {
+                document.getElementById('outPhoto').src = uploadedPhotoBase64;
             } else {
                 document.getElementById('outPhoto').src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(document.getElementById('cvNom').value || 'User') + "&background=1e293b&color=fff";
             }
 
             // Champs de droite
-            document.getElementById('outNom').innerText = document.getElementById('cvNom').value || 'JON THOMAS';
+            document.getElementById('outNom').innerText = document.getElementById('cvNom').value || 'ULRICH';
             document.getElementById('outPoste').innerText = document.getElementById('cvPoste').value || 'GRAPHISTE / DESIGNER';
-            document.getElementById('outProfil').innerText = document.getElementById('cvProfil').value || 'Graphiste créatif avec plus de 5 ans d\'expérience dans le design visuel pour le numérique et l\'impression...';
-            document.getElementById('outExp').innerText = document.getElementById('cvExp').value || 'Ginyard International Co\nChef de Projet Design (2010 - 2015)\n• Création de concepts de marque\n• Collaboration avec l\'équipe marketing';
+            document.getElementById('outProfil').innerText = document.getElementById('cvProfil').value || 'Profil professionnel...';
+            document.getElementById('outExp').innerText = document.getElementById('cvExp').value || 'Vos expériences...';
 
+            // Références
             const refVal = document.getElementById('cvRef').value;
             if(refVal.trim() === "") {
                 document.getElementById('titleRef').style.display = 'none';
@@ -339,10 +354,10 @@
             }
 
             // Champs de gauche
-            document.getElementById('outContact').innerText = document.getElementById('cvContact').value || '+228 90 00 00 00\ncontact@exemple.com\nLomé, Togo';
-            document.getElementById('outEtudes').innerText = document.getElementById('cvEtudes').value || 'Licence en Design\nUniversité (2005 - 2010)';
-            document.getElementById('outSkills').innerText = document.getElementById('cvSkills').value || 'Design UI/UX\nPhotoshop, Illustrator\nBranding & Logos';
-            document.getElementById('outLangues').innerText = document.getElementById('cvLangues').value || 'Français\nAnglais';
+            document.getElementById('outContact').innerText = document.getElementById('cvContact').value || 'Vos contacts...';
+            document.getElementById('outEtudes').innerText = document.getElementById('cvEtudes').value || 'Vos formations...';
+            document.getElementById('outSkills').innerText = document.getElementById('cvSkills').value || 'Vos compétences...';
+            document.getElementById('outLangues').innerText = document.getElementById('cvLangues').value || 'Vos langues...';
 
             // Afficher le CV
             document.getElementById('printableCV').style.display = 'block';
