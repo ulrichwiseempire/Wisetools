@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WiseTools 🛠️ - Vos Outils en Ligne</title>
+    <title>WiseTools 🛠️ - La boîte à outils intelligente</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#10b981">
     <style>
         :root {
             --bg-color: #0f172a;
@@ -11,10 +13,11 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --accent: #10b981;
-            --border: #334155;
+            --accent-hover: #059669;
+            --border: #475569;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
 
         body {
             background-color: var(--bg-color);
@@ -23,79 +26,81 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding: 20px 15px;
+            padding: 15px;
         }
 
         .container {
             width: 100%;
             max-width: 500px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        .header { text-align: center; margin-bottom: 20px; }
+        .logo { font-size: 28px; font-weight: bold; color: var(--accent); }
+        .subtitle { font-size: 14px; color: var(--text-muted); margin-top: 6px; }
 
-        .logo {
-            font-size: 32px;
-            font-weight: bold;
-            color: var(--accent);
-        }
-
-        .subtitle {
+        .install-btn {
+            display: none;
+            width: 100%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
             font-size: 14px;
-            color: var(--text-muted);
-            margin-top: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
 
-        .menu-list {
+        .ad-space {
+            width: 100%;
+            min-height: 70px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--border);
+            border-radius: 12px;
             display: flex;
-            flex-direction: column;
-            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 12px;
+            margin: 15px 0;
+            text-align: center;
         }
+
+        .menu-list { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
 
         .menu-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            text-decoration: none;
+            color: var(--text-main);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 18px 20px;
-            border-radius: 16px;
-            text-decoration: none;
-            color: var(--text-main);
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: 0.2s;
         }
 
-        .menu-item:active {
-            transform: scale(0.98);
+        .menu-item:hover {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: var(--accent);
+            transform: translateY(-2px);
         }
 
-        .menu-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #fff;
-        }
+        .menu-title { font-weight: bold; font-size: 15px; }
+        .menu-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        .arrow { font-size: 18px; color: var(--accent); }
 
-        .menu-desc {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 3px;
-        }
-
-        .arrow {
-            font-size: 18px;
-            color: var(--accent);
-            font-weight: bold;
-        }
-
-        .footer {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
+        .footer { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: auto; padding: 10px; }
+        .footer a { color: var(--text-muted); text-decoration: underline; margin-top: 5px; display: inline-block; }
     </style>
 </head>
 <body>
@@ -103,44 +108,89 @@
     <div class="container">
         <div class="header">
             <div class="logo">WiseTools 🛠️</div>
-            <div class="subtitle">La suite d'outils gratuits par WiseEmpire</div>
+            <div class="subtitle">Propulsé par WiseEmpire 🍃</div>
         </div>
 
+        <!-- BOUTON D'INSTALLATION AUTOMATIQUE -->
+        <button id="installApp" class="install-btn">📲 Installer WiseTools sur mon téléphone</button>
+
+        <div class="ad-space">📢 Espace Publicitaire (AdSense)</div>
+
         <div class="menu-list">
-            
-            <!-- 1. GENERATEUR DE CV PRO -->
+            <a href="calculateur.html" class="menu-item">
+                <div>
+                    <div class="menu-title">📊 Calculateur de Moyenne & BAC</div>
+                    <div class="menu-desc">Calcule ta moyenne par matière et coefficients</div>
+                </div>
+                <div class="arrow">→</div>
+            </a>
+
+            <!-- LIEN CV MIS A JOUR -->
             <a href="cv.html" class="menu-item">
                 <div>
                     <div class="menu-title">📄 Générateur de CV Pro</div>
-                    <div class="menu-desc">Crée ton CV moderne en PDF avec photo ajustée</div>
+                    <div class="menu-desc">Crée ton CV moderne en PDF avec ajustement photo</div>
                 </div>
                 <div class="arrow">→</div>
             </a>
 
-            <!-- 2. GENERATEUR DE FACTURE -->
             <a href="facture.html" class="menu-item">
                 <div>
-                    <div class="menu-title">🧾 Générateur de Factures</div>
-                    <div class="menu-desc">Crée et imprime tes factures professionnelles</div>
+                    <div class="menu-title">🧾 Générateur de Reçu & Facture</div>
+                    <div class="menu-desc">Crée et imprime tes factures multi-articles</div>
                 </div>
                 <div class="arrow">→</div>
             </a>
 
-            <!-- 3. CONVERTISSEUR -->
             <a href="convertisseur.html" class="menu-item">
                 <div>
-                    <div class="menu-title">🔄 Convertisseur d'Unités</div>
-                    <div class="menu-desc">Convertis monnaies, poids, distances facilement</div>
+                    <div class="menu-title">💸 Convertisseur de Devises</div>
+                    <div class="menu-desc">FCFA, Euros, Dollars, Nairas en temps réel</div>
                 </div>
                 <div class="arrow">→</div>
             </a>
 
+            <a href="salaire.html" class="menu-item">
+                <div>
+                    <div class="menu-title">💼 Calculateur Salaire Brut / Net</div>
+                    <div class="menu-desc">Estime ton salaire net après charges</div>
+                </div>
+                <div class="arrow">→</div>
+            </a>
         </div>
 
-        <div class="footer">
-            &copy; 2026 WiseEmpire - Tous droits réservés.
-        </div>
+        <div class="ad-space">📢 Espace Publicitaire (AdSense)</div>
     </div>
 
+    <div class="footer">
+        © 2026 WiseEmpire - Tous droits réservés<br>
+        <a href="legal.html">Mentions Légales & Confidentialité</a>
+    </div>
+
+    <script>
+        // Enregistrement du Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+
+        // Gestion du bouton Installer
+        let deferredPrompt;
+        const installBtn = document.getElementById('installApp');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'block';
+        });
+
+        installBtn.addEventListener('click', () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(() => {
+                    installBtn.style.display = 'none';
+                });
+            }
+        });
+    </script>
 </body>
 </html>
