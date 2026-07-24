@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WiseTools 🛠️ - Générateur de CV Express</title>
+    <title>WiseTools 🛠️ - Générateur de CV Pro</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -11,12 +11,13 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --accent: #10b981;
-            --accent-hover: #059669;
             --input-bg: #334155;
             --border: #475569;
+            --cv-primary: #1e293b;
+            --cv-bg-left: #f1f5f9;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
         body {
             background-color: var(--bg-color);
@@ -30,7 +31,7 @@
 
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 600px;
             background: var(--card-bg);
             border-radius: 20px;
             padding: 24px;
@@ -71,44 +72,131 @@
             margin-top: 15px;
         }
 
-        /* Preview CV Pro */
+        /* --- STYLES RENDU DU CV (STYLE DESIGNER 2 COLONNES) --- */
         #printableCV {
             display: none;
             background: #ffffff;
-            color: #1e293b;
-            padding: 25px;
+            color: #334155;
+            width: 100%;
             border-radius: 8px;
             margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
 
-        .cv-header { 
-            border-bottom: 2px solid #0f172a; 
-            padding-bottom: 10px; 
-            margin-bottom: 15px; 
+        .cv-grid {
+            display: grid;
+            grid-template-columns: 35% 65%;
+            min-height: 600px;
         }
-        .cv-name { font-size: 22px; font-weight: 800; color: #0f172a; text-transform: uppercase; }
-        .cv-title { font-size: 14px; color: #059669; font-weight: 700; margin-top: 2px; }
-        .cv-contact { font-size: 12px; color: #475569; margin-top: 4px; font-weight: 500; }
 
-        .cv-section { margin-bottom: 14px; }
-        .cv-section-title { 
-            font-size: 13px; 
-            font-weight: 700; 
-            color: #0f172a; 
-            border-bottom: 1px solid #e2e8f0; 
-            padding-bottom: 3px; 
-            margin-bottom: 6px; 
+        /* Colonne Gauche */
+        .cv-left {
+            background-color: var(--cv-bg-left);
+            padding: 20px 15px;
+            border-right: 1px solid #e2e8f0;
+        }
+
+        .profile-img-container {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 4px solid var(--cv-primary);
+            margin: 0 auto 15px auto;
+            overflow: hidden;
+            background: #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cv-left-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--cv-primary);
             text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            padding-bottom: 3px;
+            border-bottom: 1px solid #cbd5e1;
         }
-        .cv-text { font-size: 13px; color: #334155; white-space: pre-line; line-height: 1.5; }
+
+        .cv-left-content {
+            font-size: 11px;
+            line-height: 1.5;
+            color: #475569;
+            white-space: pre-line;
+            word-break: break-word;
+        }
+
+        /* Colonne Droite */
+        .cv-right {
+            padding: 25px 20px;
+            background: #ffffff;
+        }
+
+        .cv-header-right {
+            margin-bottom: 20px;
+        }
+
+        .cv-fullname {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--cv-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cv-jobtitle {
+            font-size: 13px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+            border-bottom: 2px solid var(--cv-primary);
+            padding-bottom: 6px;
+        }
+
+        .cv-right-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--cv-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .cv-right-content {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #334155;
+            white-space: pre-line;
+        }
 
         .nav-links { text-align: center; margin-top: 15px; font-size: 13px; }
         .nav-links a { color: var(--accent); text-decoration: none; }
 
+        /* Optimisation Impression PDF */
         @media print {
             body * { visibility: hidden; }
             #printableCV, #printableCV * { visibility: visible; }
-            #printableCV { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; padding: 0; }
+            #printableCV {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none;
+            }
+            .no-print { display: none !important; }
         }
     </style>
 </head>
@@ -117,7 +205,12 @@
     <div class="container">
         <div class="header">
             <div class="logo">WiseTools 🛠️</div>
-            <div class="subtitle">Générateur de CV Express</div>
+            <div class="subtitle">Générateur de CV Pro</div>
+        </div>
+
+        <div class="form-group">
+            <label>Lien de votre photo de profil (URL / Optionnel) :</label>
+            <input type="text" id="cvPhoto" placeholder="Ex: https://via.placeholder.com/150">
         </div>
 
         <div class="form-group">
@@ -126,81 +219,91 @@
         </div>
 
         <div class="form-group">
-            <label>Titre / Poste recherché :</label>
-            <input type="text" id="cvPoste" placeholder="Ex: Étudiant en Psychologie du travail">
-        </div>
-
-        <div class="form-group">
-            <label>Contact (Téléphone / Émail / Ville) :</label>
-            <input type="text" id="cvContact" placeholder="Ex: 97 81 73 76 | ulrich@gmail.com | Lomé">
+            <label>Titre du poste / Profession :</label>
+            <input type="text" id="cvPoste" placeholder="Ex: GRAPHISTE / DESIGNER">
         </div>
 
         <div class="form-group">
             <label>Profil / À propos de moi :</label>
-            <textarea id="cvProfil" placeholder="Ex: Jeune diplômé motivé et rigoureux..."></textarea>
+            <textarea id="cvProfil" placeholder="Ex: Graphiste créatif avec plus de 5 ans d'expérience dans le design visuel..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Contact (Téléphone, Email, Adresse, Site Web) :</label>
+            <textarea id="cvContact" placeholder="Ex: +228 97 81 73 76&#10;contact@siteweb.com&#10;Lomé, Togo"></textarea>
         </div>
 
         <div class="form-group">
             <label>Formations & Diplômes :</label>
-            <textarea id="cvEtudes" placeholder="Ex: 2024 - Licence en Psychologie&#10;2023 - BAC&#10;2020 - BEPC"></textarea>
+            <textarea id="cvEtudes" placeholder="Ex: Licence en Design Visuel&#10;Université de Lomé (2020 - 2023)"></textarea>
         </div>
 
         <div class="form-group">
-            <label>Expériences Professionnelles & Stages :</label>
-            <textarea id="cvExp" placeholder="Ex: Stage chez WiseEmpire (3 ans)..."></textarea>
+            <label>Expériences Professionnelles :</label>
+            <textarea id="cvExp" placeholder="Ex: Responsable Design - WiseEmpire&#10;(2021 - Present)&#10;• Création de concepts visuels&#10;• Gestion de projets médias"></textarea>
         </div>
 
-        <!-- CHAMP 1 : COMPÉTENCES SEULEMENT -->
         <div class="form-group">
-            <label>Compétences :</label>
-            <textarea id="cvSkills" placeholder="Ex: Informatique, Gestion de projet, Analyse de données"></textarea>
+            <label>Compétences / Expertise :</label>
+            <textarea id="cvSkills" placeholder="Ex: Design UI/UX&#10;Photoshop, Illustrator&#10;Design de logo"></textarea>
         </div>
 
-        <!-- CHAMP 2 : LANGUES SEULEMENT -->
         <div class="form-group">
             <label>Langues maîtrisées :</label>
-            <textarea id="cvLangues" placeholder="Ex: Français (Courant)&#10;Anglais (Intermédiaire)"></textarea>
+            <textarea id="cvLangues" placeholder="Ex: Français (Langue maternelle)&#10;Anglais (Courant)"></textarea>
         </div>
 
-        <button class="btn" onclick="genererCV()">Générer Mon CV 📄</button>
+        <div class="form-group">
+            <label>Références (Optionnel) :</label>
+            <textarea id="cvRef" placeholder="Ex: M. Koffi Eric - Directeur WiseEmpire&#10;Tél: +228 90 00 00 00"></textarea>
+        </div>
 
-        <!-- ZONE PREVIEW CV -->
+        <button class="btn" onclick="genererCV()">Générer le CV 📄</button>
+
+        <!-- ZONE DU CV MODERNE (MODEL CANVAS) -->
         <div id="printableCV">
-            <div class="cv-header">
-                <div class="cv-name" id="outNom"></div>
-                <div class="cv-title" id="outPoste"></div>
-                <div class="cv-contact" id="outContact"></div>
+            <div class="cv-grid">
+                
+                <!-- COLONNE GAUCHE (GRIS) -->
+                <div class="cv-left">
+                    <div class="profile-img-container">
+                        <img id="outPhoto" src="https://via.placeholder.com/150" alt="Photo de Profil">
+                    </div>
+
+                    <div class="cv-left-title">Contact</div>
+                    <div class="cv-left-content" id="outContact"></div>
+
+                    <div class="cv-left-title">Éducation</div>
+                    <div class="cv-left-content" id="outEtudes"></div>
+
+                    <div class="cv-left-title">Expertise</div>
+                    <div class="cv-left-content" id="outSkills"></div>
+
+                    <div class="cv-left-title">Langues</div>
+                    <div class="cv-left-content" id="outLangues"></div>
+                </div>
+
+                <!-- COLONNE DROITE (BLANC) -->
+                <div class="cv-right">
+                    <div class="cv-header-right">
+                        <div class="cv-fullname" id="outNom">NOM PRÉNOM</div>
+                        <div class="cv-jobtitle" id="outPoste">INTITULÉ DU POSTE</div>
+                    </div>
+
+                    <div class="cv-right-title">Profil</div>
+                    <div class="cv-right-content" id="outProfil"></div>
+
+                    <div class="cv-right-title">Expérience Professionnelle</div>
+                    <div class="cv-right-content" id="outExp"></div>
+
+                    <div class="cv-right-title" id="titleRef">Références</div>
+                    <div class="cv-right-content" id="outRef"></div>
+                </div>
+
             </div>
 
-            <div class="cv-section">
-                <div class="cv-section-title">Profil</div>
-                <div class="cv-text" id="outProfil"></div>
-            </div>
-
-            <div class="cv-section">
-                <div class="cv-section-title">Formations & Diplômes</div>
-                <div class="cv-text" id="outEtudes"></div>
-            </div>
-
-            <div class="cv-section">
-                <div class="cv-section-title">Expériences Professionnelles</div>
-                <div class="cv-text" id="outExp"></div>
-            </div>
-
-            <!-- BLOC 1 : COMPÉTENCES -->
-            <div class="cv-section">
-                <div class="cv-section-title">Compétences</div>
-                <div class="cv-text" id="outSkills"></div>
-            </div>
-
-            <!-- BLOC 2 : LANGUES -->
-            <div class="cv-section">
-                <div class="cv-section-title">Langues</div>
-                <div class="cv-text" id="outLangues"></div>
-            </div>
-
-            <button onclick="window.print()" style="margin-top:20px; width:100%; padding:12px; background:#0f172a; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">
-                Télécharger le CV en PDF
+            <button class="no-print" onclick="window.print()" style="margin:15px; width:calc(100% - 30px); padding:12px; background:#0f172a; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">
+                Télécharger le CV en PDF 🖨️
             </button>
         </div>
 
@@ -211,15 +314,37 @@
 
     <script>
         function genererCV() {
-            document.getElementById('outNom').innerText = document.getElementById('cvNom').value || 'VOTRE NOM';
-            document.getElementById('outPoste').innerText = document.getElementById('cvPoste').value || 'TITRE DU POSTE';
-            document.getElementById('outContact').innerText = document.getElementById('cvContact').value || 'CONTACTS';
-            document.getElementById('outProfil').innerText = document.getElementById('cvProfil').value || 'Mon profil...';
-            document.getElementById('outEtudes').innerText = document.getElementById('cvEtudes').value || 'Mes études...';
-            document.getElementById('outExp').innerText = document.getElementById('cvExp').value || 'Mes expériences...';
-            document.getElementById('outSkills').innerText = document.getElementById('cvSkills').value || 'Mes compétences...';
-            document.getElementById('outLangues').innerText = document.getElementById('cvLangues').value || 'Mes langues...';
+            // Photo
+            const photoUrl = document.getElementById('cvPhoto').value;
+            if(photoUrl.trim() !== "") {
+                document.getElementById('outPhoto').src = photoUrl;
+            } else {
+                document.getElementById('outPhoto').src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(document.getElementById('cvNom').value || 'User') + "&background=1e293b&color=fff";
+            }
 
+            // Champs de droite
+            document.getElementById('outNom').innerText = document.getElementById('cvNom').value || 'JON THOMAS';
+            document.getElementById('outPoste').innerText = document.getElementById('cvPoste').value || 'GRAPHISTE / DESIGNER';
+            document.getElementById('outProfil').innerText = document.getElementById('cvProfil').value || 'Graphiste créatif avec plus de 5 ans d\'expérience dans le design visuel pour le numérique et l\'impression...';
+            document.getElementById('outExp').innerText = document.getElementById('cvExp').value || 'Ginyard International Co\nChef de Projet Design (2010 - 2015)\n• Création de concepts de marque\n• Collaboration avec l\'équipe marketing';
+
+            const refVal = document.getElementById('cvRef').value;
+            if(refVal.trim() === "") {
+                document.getElementById('titleRef').style.display = 'none';
+                document.getElementById('outRef').style.display = 'none';
+            } else {
+                document.getElementById('titleRef').style.display = 'block';
+                document.getElementById('outRef').style.display = 'block';
+                document.getElementById('outRef').innerText = refVal;
+            }
+
+            // Champs de gauche
+            document.getElementById('outContact').innerText = document.getElementById('cvContact').value || '+228 90 00 00 00\ncontact@exemple.com\nLomé, Togo';
+            document.getElementById('outEtudes').innerText = document.getElementById('cvEtudes').value || 'Licence en Design\nUniversité (2005 - 2010)';
+            document.getElementById('outSkills').innerText = document.getElementById('cvSkills').value || 'Design UI/UX\nPhotoshop, Illustrator\nBranding & Logos';
+            document.getElementById('outLangues').innerText = document.getElementById('cvLangues').value || 'Français\nAnglais';
+
+            // Afficher le CV
             document.getElementById('printableCV').style.display = 'block';
         }
     </script>
