@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiseTools 🛠️ - Générateur de CV Express</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #10b981;
+            --accent-hover: #059669;
+            --input-bg: #334155;
+            --border: #475569;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
+        }
+
+        .header { text-align: center; margin-bottom: 20px; }
+        .logo { font-size: 24px; font-weight: bold; color: var(--accent); }
+        .subtitle { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 5px; }
+
+        input, textarea {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: #fff;
+            padding: 12px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        textarea { resize: vertical; min-height: 70px; }
+
+        .btn {
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        /* Preview CV Imprimable */
+        #printableCV {
+            display: none;
+            background: #ffffff;
+            color: #1e293b;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .cv-header { border-bottom: 2px solid #10b981; padding-bottom: 10px; margin-bottom: 15px; }
+        .cv-name { font-size: 22px; font-weight: bold; color: #0f172a; text-transform: uppercase; }
+        .cv-title { font-size: 14px; color: #10b981; font-weight: bold; }
+        .cv-contact { font-size: 12px; color: #64748b; margin-top: 5px; }
+
+        .cv-section { margin-bottom: 15px; }
+        .cv-section-title { font-size: 14px; font-weight: bold; color: #0f172a; border-bottom: 1px solid #cbd5e1; padding-bottom: 3px; margin-bottom: 8px; text-transform: uppercase; }
+        .cv-text { font-size: 13px; color: #334155; white-space: pre-line; line-height: 1.5; }
+
+        .nav-links { text-align: center; margin-top: 15px; font-size: 13px; }
+        .nav-links a { color: var(--accent); text-decoration: none; }
+
+        @media print {
+            body * { visibility: hidden; }
+            #printableCV, #printableCV * { visibility: visible; }
+            #printableCV { position: absolute; left: 0; top: 0; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">WiseTools 🛠️</div>
+            <div class="subtitle">Générateur de CV Express</div>
+        </div>
+
+        <div class="form-group">
+            <label>Nom & Prénom :</label>
+            <input type="text" id="cvNom" placeholder="Ex: KOFFI Jean">
+        </div>
+
+        <div class="form-group">
+            <label>Titre / Poste recherché :</label>
+            <input type="text" id="cvPoste" placeholder="Ex: Étudiant en Informatique / Commercial">
+        </div>
+
+        <div class="form-group">
+            <label>Contact (Téléphone / Émail / Ville) :</label>
+            <input type="text" id="cvContact" placeholder="Ex: +228 90 00 00 00 | Lomé, Togo">
+        </div>
+
+        <div class="form-group">
+            <label>Profil / À propos de moi :</label>
+            <textarea id="cvProfil" placeholder="Ex: Jeune diplômé motivé et dynamique..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Diplômes & Formations :</label>
+            <textarea id="cvEtudes" placeholder="Ex: 2026 - BAC Scientifique&#10;2024 - BEPC"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Expériences & Stages :</label>
+            <textarea id="cvExp" placeholder="Ex: Stage chez WiseEmpire (2 mois)..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Compétences & Langues :</label>
+            <textarea id="cvSkills" placeholder="Ex: Français (Courant), Informatique, Vente..."></textarea>
+        </div>
+
+        <button class="btn" onclick="genererCV()">Générer Mon CV 📄</button>
+
+        <!-- ZONE PREVIEW CV -->
+        <div id="printableCV">
+            <div class="cv-header">
+                <div class="cv-name" id="outNom"></div>
+                <div class="cv-title" id="outPoste"></div>
+                <div class="cv-contact" id="outContact"></div>
+            </div>
+
+            <div class="cv-section">
+                <div class="cv-section-title">Profil</div>
+                <div class="cv-text" id="outProfil"></div>
+            </div>
+
+            <div class="cv-section">
+                <div class="cv-section-title">Formations & Diplômes</div>
+                <div class="cv-text" id="outEtudes"></div>
+            </div>
+
+            <div class="cv-section">
+                <div class="cv-section-title">Expériences Professionnelles</div>
+                <div class="cv-text" id="outExp"></div>
+            </div>
+
+            <div class="cv-section">
+                <div class="cv-section-title">Compétences & Langues</div>
+                <div class="cv-text" id="outSkills"></div>
+            </div>
+
+            <button onclick="window.print()" style="margin-top:20px; width:100%; padding:10px; background:#0f172a; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">
+                🖨️ Télécharger en PDF
+            </button>
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html">🏠 Retour à l'Accueil WiseTools</a>
+        </div>
+    </div>
+
+    <script>
+        function genererCV() {
+            document.getElementById('outNom').innerText = document.getElementById('cvNom').value || 'VOTRE NOM';
+            document.getElementById('outPoste').innerText = document.getElementById('cvPoste').value || 'TITRE DU POSTE';
+            document.getElementById('outContact').innerText = document.getElementById('cvContact').value || 'CONTACTS';
+            document.getElementById('outProfil').innerText = document.getElementById('cvProfil').value || 'Mon profil...';
+            document.getElementById('outEtudes').innerText = document.getElementById('cvEtudes').value || 'Mes études...';
+            document.getElementById('outExp').innerText = document.getElementById('cvExp').value || 'Mes expériences...';
+            document.getElementById('outSkills').innerText = document.getElementById('cvSkills').value || 'Mes compétences...';
+
+            document.getElementById('printableCV').style.display = 'block';
+        }
+    </script>
+</body>
+          </html>
+          
