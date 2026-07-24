@@ -64,7 +64,7 @@
         .subtitle { font-size: 14px; color: var(--text-muted); margin-top: 6px; }
 
         .install-btn {
-            display: block; /* Forcé toujours visible */
+            display: block;
             width: 100%;
             background: linear-gradient(135deg, #10b981, #059669);
             color: white;
@@ -77,6 +77,20 @@
             margin-bottom: 15px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Message d'aide discret si le prompt natif n'est pas dispo */
+        .install-instruction {
+            display: none;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--accent);
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #f8fafc;
+            margin-bottom: 15px;
+            text-align: center;
+            line-height: 1.4;
         }
 
         .ad-space {
@@ -134,8 +148,13 @@
             <div class="subtitle">Propulsé par WiseEmpire 🍃</div>
         </div>
 
-        <!-- BOUTON D'INSTALLATION AUTOMATIQUE (VISIBILITÉ GARANTIE) -->
+        <!-- BOUTON D'INSTALLATION -->
         <button id="installApp" class="install-btn">📲 Installer WiseTools sur mon téléphone</button>
+        
+        <!-- INSTRUCTION DE SECOURS -->
+        <div id="installHint" class="install-instruction">
+            📲 Pour installer l'application, appuie sur les <b>3 points en haut à droite</b> de ton navigateur, puis sélectionne <b>"Installer l'application"</b> ou <b>"Ajouter à l'écran d'accueil"</b>.
+        </div>
 
         <div class="ad-space">📢 Espace Publicitaire (AdSense)</div>
 
@@ -195,9 +214,9 @@
             navigator.serviceWorker.register('sw.js');
         }
 
-        // Capture de l'événement natif Chrome
         let deferredPrompt;
         const installBtn = document.getElementById('installApp');
+        const installHint = document.getElementById('installHint');
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -206,14 +225,22 @@
 
         installBtn.addEventListener('click', () => {
             if (deferredPrompt) {
-                // Déclenche la VRAIE fenêtre d'installation native Chrome
+                // Si Chrome est prêt, on déclenche la vraie pop-up native
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
                         installBtn.style.display = 'none';
+                        installHint.style.display = 'none';
                     }
                     deferredPrompt = null;
                 });
+            } else {
+                // Si Chrome bloque ou n'a pas déclenché le prompt, on affiche l'aide proprement pour guider l'utilisateur
+                if (installHint.style.display === 'block') {
+                    installHint.style.display = 'none';
+                } else {
+                    installHint.style.display = 'block';
+                }
             }
         });
     </script>
