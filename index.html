@@ -64,7 +64,7 @@
         .subtitle { font-size: 14px; color: var(--text-muted); margin-top: 6px; }
 
         .install-btn {
-            display: none;
+            display: block; /* Forcé toujours visible */
             width: 100%;
             background: linear-gradient(135deg, #10b981, #059669);
             color: white;
@@ -134,7 +134,7 @@
             <div class="subtitle">Propulsé par WiseEmpire 🍃</div>
         </div>
 
-        <!-- BOUTON D'INSTALLATION AUTOMATIQUE -->
+        <!-- BOUTON D'INSTALLATION AUTOMATIQUE (VISIBILITÉ GARANTIE) -->
         <button id="installApp" class="install-btn">📲 Installer WiseTools sur mon téléphone</button>
 
         <div class="ad-space">📢 Espace Publicitaire (AdSense)</div>
@@ -195,18 +195,18 @@
             navigator.serviceWorker.register('sw.js');
         }
 
-        // Gestion du bouton Installer VRAIE VERSION PWA
+        // Capture de l'événement natif Chrome
         let deferredPrompt;
         const installBtn = document.getElementById('installApp');
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installBtn.style.display = 'block';
         });
 
         installBtn.addEventListener('click', () => {
             if (deferredPrompt) {
+                // Déclenche la VRAIE fenêtre d'installation native Chrome
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
