@@ -46,7 +46,7 @@
         .form-group { margin-bottom: 12px; }
         label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 5px; }
 
-        input, textarea, select {
+        input, textarea {
             width: 100%;
             background: var(--input-bg);
             border: 1px solid var(--border);
@@ -102,20 +102,40 @@
             height: 120px;
             border-radius: 50%;
             border: 4px solid var(--cv-primary);
-            margin: 0 auto 15px auto;
+            margin: 0 auto 5px auto;
             overflow: hidden;
             background: #cbd5e1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: relative;
+            cursor: move;
+            touch-action: none; /* Permet la gestion tactile personnalisée */
         }
 
         .profile-img-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            /* Cible par défaut le haut pour capturer le visage */
-            object-position: center top; 
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: center center;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .img-controls {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .img-btn {
+            background: #cbd5e1;
+            border: none;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            margin: 0 2px;
         }
 
         .cv-left-title {
@@ -207,19 +227,10 @@
             <div class="subtitle">Générateur de CV Pro</div>
         </div>
 
-        <!-- PHOTO + OPTION D'AJUSTEMENT DU VISAGE -->
+        <!-- CHOIX PHOTO -->
         <div class="form-group">
             <label>Choisir votre photo dans la galerie :</label>
             <input type="file" id="cvPhotoInput" accept="image/*">
-        </div>
-
-        <div class="form-group">
-            <label>Cadrage de la photo :</label>
-            <select id="cvPhotoCrop" onchange="ajusterCadrePhoto()">
-                <option value="center top" selected>Haut (Centré sur le Visage 👤)</option>
-                <option value="center center">Milieu (Centré Standard)</option>
-                <option value="center bottom">Bas</option>
-            </select>
         </div>
 
         <div class="form-group">
@@ -273,10 +284,15 @@
         <div id="printableCV">
             <div class="cv-grid">
                 
-                <!-- COLONNE GAUCHE (GRIS) -->
+                <!-- COLONNE GAUCHE -->
                 <div class="cv-left">
-                    <div class="profile-img-container">
+                    <div class="profile-img-container" id="imgBox">
                         <img id="outPhoto" src="https://via.placeholder.com/150" alt="Photo de Profil">
+                    </div>
+                    <div class="img-controls no-print">
+                        <span style="font-size:10px; color:#64748b; display:block;">👆 Glisse la photo avec le doigt</span>
+                        <button class="img-btn" onclick="zoomImage(0.1)">🔍 +</button>
+                        <button class="img-btn" onclick="zoomImage(-0.1)">🔍 -</button>
                     </div>
 
                     <div class="cv-left-title">Contact</div>
@@ -292,7 +308,7 @@
                     <div class="cv-left-content" id="outLangues"></div>
                 </div>
 
-                <!-- COLONNE DROITE (BLANC) -->
+                <!-- COLONNE DROITE -->
                 <div class="cv-right">
                     <div class="cv-header-right">
                         <div class="cv-fullname" id="outNom">NOM PRÉNOM</div>
@@ -323,6 +339,9 @@
 
     <script>
         let uploadedPhotoBase64 = null;
+        let imgScale = 1;
+        let imgPosX = 0;
+        let imgPosY = 0;
 
         document.getElementById('cvPhotoInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -330,26 +349,64 @@
                 const reader = new FileReader();
                 reader.onload = function(evt) {
                     uploadedPhotoBase64 = evt.target.result;
+                    imgScale = 1;
+                    imgPosX = 0;
+                    imgPosY = 0;
+                    applyImgTransform();
                 }
                 reader.readAsDataURL(file);
             }
         });
 
-        function ajusterCadrePhoto() {
-            const cropValue = document.getElementById('cvPhotoCrop').value;
-            document.getElementById('outPhoto').style.objectPosition = cropValue;
+        // --- GESTION DU GLISSER-DÉPOSER TACTILE & SOURIS ---
+        const imgBox = document.getElementById('imgBox');
+        const img = document.getElementById('outPhoto');
+        let isDragging = false;
+        let startX, startY;
+
+        function startDrag(e) {
+            isDragging = true;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            startX = clientX - imgPosX;
+            startY = clientY - imgPosY;
+        }
+
+        function moveDrag(e) {
+            if (!isDragging) return;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            imgPosX = clientX - startX;
+            imgPosY = clientY - startY;
+            applyImgTransform();
+        }
+
+        function endDrag() { isDragging = false; }
+
+        imgBox.addEventListener('mousedown', startDrag);
+        window.addEventListener('mousemove', moveDrag);
+        window.addEventListener('mouseup', endDrag);
+
+        imgBox.addEventListener('touchstart', startDrag);
+        window.addEventListener('touchmove', moveDrag);
+        window.addEventListener('touchend', endDrag);
+
+        function zoomImage(amount) {
+            imgScale = Math.max(0.5, imgScale + amount);
+            applyImgTransform();
+        }
+
+        function applyImgTransform() {
+            img.style.transform = `translate(${imgPosX}px, ${imgPosY}px) scale(${imgScale})`;
         }
 
         function genererCV() {
-            // Photo & Cadrage
-            ajusterCadrePhoto();
             if (uploadedPhotoBase64) {
                 document.getElementById('outPhoto').src = uploadedPhotoBase64;
             } else {
                 document.getElementById('outPhoto').src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(document.getElementById('cvNom').value || 'User') + "&background=1e293b&color=fff";
             }
 
-            // Textes
             document.getElementById('outNom').innerText = document.getElementById('cvNom').value || 'ULRICH';
             document.getElementById('outPoste').innerText = document.getElementById('cvPoste').value || 'GRAPHISTE / DESIGNER';
             document.getElementById('outProfil').innerText = document.getElementById('cvProfil').value || 'Profil professionnel...';
