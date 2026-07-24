@@ -71,37 +71,36 @@
             margin-top: 15px;
         }
 
-        /* Preview CV 100% Professionnel & Formel */
+        /* Preview CV 100% Professionnel */
         #printableCV {
             display: none;
             background: #ffffff;
             color: #1e293b;
-            padding: 30px;
+            padding: 25px;
             border-radius: 8px;
             margin-top: 20px;
         }
 
         .cv-header { 
             border-bottom: 2px solid #0f172a; 
-            padding-bottom: 12px; 
-            margin-bottom: 20px; 
+            padding-bottom: 10px; 
+            margin-bottom: 15px; 
         }
-        .cv-name { font-size: 24px; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 1px; }
-        .cv-title { font-size: 15px; color: #059669; font-weight: 700; margin-top: 3px; }
-        .cv-contact { font-size: 12px; color: #475569; margin-top: 6px; font-weight: 500; }
+        .cv-name { font-size: 22px; font-weight: 800; color: #0f172a; text-transform: uppercase; }
+        .cv-title { font-size: 14px; color: #059669; font-weight: 700; margin-top: 2px; }
+        .cv-contact { font-size: 12px; color: #475569; margin-top: 4px; font-weight: 500; }
 
-        .cv-section { margin-bottom: 18px; }
+        .cv-section { margin-bottom: 14px; }
         .cv-section-title { 
             font-size: 13px; 
             font-weight: 700; 
             color: #0f172a; 
             border-bottom: 1px solid #e2e8f0; 
             padding-bottom: 3px; 
-            margin-bottom: 8px; 
+            margin-bottom: 6px; 
             text-transform: uppercase;
-            letter-spacing: 0.8px;
         }
-        .cv-text { font-size: 13px; color: #334155; white-space: pre-line; line-height: 1.6; }
+        .cv-text { font-size: 13px; color: #334155; white-space: pre-line; line-height: 1.5; }
 
         .nav-links { text-align: center; margin-top: 15px; font-size: 13px; }
         .nav-links a { color: var(--accent); text-decoration: none; }
@@ -153,17 +152,17 @@
 
         <div class="form-group">
             <label>Compétences :</label>
-            <textarea id="cvSkills" placeholder="Ex: Gestion de projets, Informatique, Analyse de données"></textarea>
+            <textarea id="cvSkills" placeholder="Ex: Informatique, Gestion de projet, Analyse..."></textarea>
         </div>
 
         <div class="form-group">
             <label>Langues maîtrisées :</label>
-            <textarea id="cvLangues" placeholder="Ex: Français (Courant)&#10;Anglais (Intermédiaire)"></textarea>
+            <textarea id="cvLangues" placeholder="Ex: Français (Courant)&#10;Anglais (Courant)"></textarea>
         </div>
 
         <button class="btn" onclick="genererCV()">Générer Mon CV 📄</button>
 
-        <!-- ZONE PREVIEW CV FORMEL -->
+        <!-- ZONE PREVIEW CV -->
         <div id="printableCV">
             <div class="cv-header">
                 <div class="cv-name" id="outNom"></div>
@@ -171,27 +170,27 @@
                 <div class="cv-contact" id="outContact"></div>
             </div>
 
-            <div class="cv-section" id="secProfil">
+            <div class="cv-section">
                 <div class="cv-section-title">Profil</div>
                 <div class="cv-text" id="outProfil"></div>
             </div>
 
-            <div class="cv-section" id="secEtudes">
+            <div class="cv-section">
                 <div class="cv-section-title">Formations & Diplômes</div>
                 <div class="cv-text" id="outEtudes"></div>
             </div>
 
-            <div class="cv-section" id="secExp">
+            <div class="cv-section">
                 <div class="cv-section-title">Expériences Professionnelles</div>
                 <div class="cv-text" id="outExp"></div>
             </div>
 
-            <div class="cv-section" id="secSkills">
+            <div class="cv-section">
                 <div class="cv-section-title">Compétences</div>
                 <div class="cv-text" id="outSkills"></div>
             </div>
 
-            <div class="cv-section" id="secLangues">
+            <div class="cv-section">
                 <div class="cv-section-title">Langues</div>
                 <div class="cv-text" id="outLangues"></div>
             </div>
@@ -208,18 +207,18 @@
 
     <script>
         function genererCV() {
-            document.getElementById('outNom').innerText = document.getElementById('cvNom').value || 'NOM PRÉNOM';
+            document.getElementById('outNom').innerText = document.getElementById('cvNom').value || 'VOTRE NOM';
             document.getElementById('outPoste').innerText = document.getElementById('cvPoste').value || 'TITRE DU POSTE';
-            document.getElementById('outContact').innerText = document.getElementById('cvContact').value || 'Téléphone | Émail | Ville';
-            document.getElementById('outProfil').innerText = document.getElementById('cvProfil').value || 'Description du profil...';
-            document.getElementById('outEtudes').innerText = document.getElementById('cvEtudes').value || 'Détail des diplômes...';
-            document.getElementById('outExp').innerText = document.getElementById('cvExp').value || 'Détail des expériences...';
-            document.getElementById('outSkills').innerText = document.getElementById('cvSkills').value || 'Liste des compétences...';
-            document.getElementById('outLangues').innerText = document.getElementById('cvLangues').value || 'Langues pratiquées...';
+            document.getElementById('outContact').innerText = document.getElementById('cvContact').value || 'CONTACTS';
+            document.getElementById('outProfil').innerText = document.getElementById('cvProfil').value || 'Mon profil...';
+            document.getElementById('outEtudes').innerText = document.getElementById('cvEtudes').value || 'Mes études...';
+            document.getElementById('outExp').innerText = document.getElementById('cvExp').value || 'Mes expériences...';
+            document.getElementById('outSkills').innerText = document.getElementById('cvSkills').value || 'Mes compétences...';
+            document.getElementById('outLangues').innerText = document.getElementById('cvLangues').value || 'Mes langues...';
 
             document.getElementById('printableCV').style.display = 'block';
         }
     </script>
 </body>
-    </html>
-    
+                    </html>
+                    
