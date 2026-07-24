@@ -64,7 +64,7 @@
         .subtitle { font-size: 14px; color: var(--text-muted); margin-top: 6px; }
 
         .install-btn {
-            display: block; /* Forcé visible pour être sûr */
+            display: none;
             width: 100%;
             background: linear-gradient(135deg, #10b981, #059669);
             color: white;
@@ -192,26 +192,28 @@
     <script>
         // Enregistrement du Service Worker
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').catch(() => {});
+            navigator.serviceWorker.register('sw.js');
         }
 
-        // Gestion du bouton Installer
+        // Gestion du bouton Installer VRAIE VERSION PWA
         let deferredPrompt;
         const installBtn = document.getElementById('installApp');
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
+            installBtn.style.display = 'block';
         });
 
         installBtn.addEventListener('click', () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then(() => {
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        installBtn.style.display = 'none';
+                    }
                     deferredPrompt = null;
                 });
-            } else {
-                alert("Pour installer l'application :\n1. Clique sur les 3 petits points (⋮) en haut à droite du navigateur Chrome.\n2. Sélectionne 'Ajouter à l'écran d'accueil'.");
             }
         });
     </script>
