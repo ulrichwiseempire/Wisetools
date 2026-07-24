@@ -71,7 +71,7 @@
             margin-top: 15px;
         }
 
-        /* Preview CV 100% Professionnel */
+        /* Preview CV Pro */
         #printableCV {
             display: none;
             background: #ffffff;
@@ -150,14 +150,16 @@
             <textarea id="cvExp" placeholder="Ex: Stage chez WiseEmpire (3 ans)..."></textarea>
         </div>
 
+        <!-- CHAMP 1 : COMPÉTENCES SEULEMENT -->
         <div class="form-group">
             <label>Compétences :</label>
-            <textarea id="cvSkills" placeholder="Ex: Informatique, Gestion de projet, Analyse..."></textarea>
+            <textarea id="cvSkills" placeholder="Ex: Informatique, Gestion de projet, Analyse de données"></textarea>
         </div>
 
+        <!-- CHAMP 2 : LANGUES SEULEMENT -->
         <div class="form-group">
             <label>Langues maîtrisées :</label>
-            <textarea id="cvLangues" placeholder="Ex: Français (Courant)&#10;Anglais (Courant)"></textarea>
+            <textarea id="cvLangues" placeholder="Ex: Français (Courant)&#10;Anglais (Intermédiaire)"></textarea>
         </div>
 
         <button class="btn" onclick="genererCV()">Générer Mon CV 📄</button>
@@ -185,11 +187,13 @@
                 <div class="cv-text" id="outExp"></div>
             </div>
 
+            <!-- BLOC 1 : COMPÉTENCES -->
             <div class="cv-section">
                 <div class="cv-section-title">Compétences</div>
                 <div class="cv-text" id="outSkills"></div>
             </div>
 
+            <!-- BLOC 2 : LANGUES -->
             <div class="cv-section">
                 <div class="cv-section-title">Langues</div>
                 <div class="cv-text" id="outLangues"></div>
@@ -220,5 +224,4 @@
         }
     </script>
 </body>
-                    </html>
-                    
+</html>
