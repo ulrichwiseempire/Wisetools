@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mentions Légales & Confidentialité - WiseTools</title>
+    <title>WiseTools 🛠️ - Mentions Légales</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -11,37 +11,100 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --accent: #10b981;
-            --border: #475569;
+            --border: #334155;
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 15px; }
-        .container { width: 100%; max-width: 600px; background: var(--card-bg); border-radius: 20px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); margin-bottom: 20px; }
-        h1 { font-size: 20px; color: var(--accent); margin-bottom: 15px; text-align: center; }
-        h2 { font-size: 15px; color: var(--text-main); margin: 15px 0 8px 0; border-left: 3px solid var(--accent); padding-left: 8px; }
-        p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 10px; }
-        .nav-links { text-align: center; margin-top: 20px; font-size: 13px; }
-        .nav-links a { color: var(--accent); text-decoration: none; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
+        }
+
+        .header { text-align: center; margin-bottom: 25px; }
+        .logo { font-size: 22px; font-weight: bold; color: var(--accent); }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--accent);
+            margin-top: 20px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 16px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        p, ul {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        ul { list-style: none; padding-left: 5px; margin-top: 5px; }
+        ul li { margin-bottom: 5px; }
+        ul li a { color: var(--accent); text-decoration: none; }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Mentions Légales & Politique de Confidentialité</h1>
-        
-        <h2>1. Édition du site</h2>
-        <p>Le site <strong>WiseTools</strong> est une plateforme de services gratuits édité sous le label <strong>WiseEmpire</strong>.</p>
-        
-        <h2>2. Protection des données</h2>
-        <p>WiseTools respecte votre vie privée. Les outils de calcul (moyenne, devises, salaire, factures) fonctionnent directement dans votre navigateur internet. Aucune donnée personnelle saisie dans les outils n'est enregistrée ou transmise à nos serveurs.</p>
-        
-        <h2>3. Publicités & Cookies</h2>
-        <p>Ce site utilise des régies publicitaires partenaires (telles que Google AdSense) pour afficher des annonces. Ces régies peuvent utiliser des cookies pour diffuser des publicités adaptées en fonction des visites ultérieures sur ce site ou d'autres sites web.</p>
-        
-        <h2>4. Contact</h2>
-        <p>Pour toute question concernant le fonctionnement de la plateforme, vous pouvez contacter l'équipe via les canaux officiels de WiseEmpire.</p>
 
-        <div class="nav-links">
-            <a href="index.html">← Retour à l'Accueil WiseTools</a>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Mentions Légales & Politique de Confidentialité</div>
         </div>
+
+        <div class="section-title">1. Édition du site</div>
+        <p>Le site <strong>WiseTools</strong> est une plateforme de services gratuits édité sous le label <strong>WiseEmpire</strong>.</p>
+
+        <div class="section-title">2. Protection des données</div>
+        <p>WiseTools respecte votre vie privée. Les outils de calcul (moyenne, devises, salaire, factures) fonctionnent directement dans votre navigateur internet. Aucune donnée personnelle saisie dans les outils n'est enregistrée ou transmise à nos serveurs.</p>
+
+        <div class="section-title">3. Publicités & Cookies</div>
+        <p>Ce site utilise des régies publicitaires partenaires (telles que Google AdSense) pour afficher des annonces. Ces régies peuvent utiliser des cookies pour diffuser des publicités adaptées en fonction des visites ultérieures sur ce site ou d'autres sites web.</p>
+
+        <div class="section-title">4. Contact</div>
+        <p>Pour toute question concernant le fonctionnement de la plateforme ou pour toute demande de partenariat, vous pouvez contacter l'équipe via :</p>
+        <ul>
+            <li>📧 <strong>Email :</strong> <a href="mailto:ulrichwiseempire1@gmail.com">ulrichwiseempire1@gmail.com</a></li>
+            <li>📱 <strong>Téléphone / WhatsApp :</strong> <a href="https://wa.me/22897817376" target="_blank">+228 97 81 73 76</a></li>
+        </ul>
+
+        <a href="index.html" class="back-link">← Retour à l'Accueil WiseTools</a>
     </div>
+
 </body>
 </html>
