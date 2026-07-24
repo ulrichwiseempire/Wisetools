@@ -64,7 +64,7 @@
         .subtitle { font-size: 14px; color: var(--text-muted); margin-top: 6px; }
 
         .install-btn {
-            display: none;
+            display: block; /* Forcé visible pour être sûr */
             width: 100%;
             background: linear-gradient(135deg, #10b981, #059669);
             color: white;
@@ -128,7 +128,7 @@
     <div class="container">
         <div class="header">
             <div class="logo-container">
-                <img src="logo.png" alt="WiseTools Logo" class="logo-img">
+                <img src="logo.png" alt="WiseTools Logo" class="logo-img" onerror="this.style.display='none'">
                 <div class="logo">WiseTools 🛠️</div>
             </div>
             <div class="subtitle">Propulsé par WiseEmpire 🍃</div>
@@ -148,7 +148,6 @@
                 <div class="arrow">→</div>
             </a>
 
-            <!-- LIEN CV MIS A JOUR -->
             <a href="cv.html" class="menu-item">
                 <div>
                     <div class="menu-title">📄 Générateur de CV Pro</div>
@@ -193,7 +192,7 @@
     <script>
         // Enregistrement du Service Worker
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
+            navigator.serviceWorker.register('sw.js').catch(() => {});
         }
 
         // Gestion du bouton Installer
@@ -203,18 +202,18 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installBtn.style.display = 'block';
         });
 
         installBtn.addEventListener('click', () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then(() => {
-                    installBtn.style.display = 'none';
+                    deferredPrompt = null;
                 });
+            } else {
+                alert("Pour installer l'application :\n1. Clique sur les 3 petits points (⋮) en haut à droite du navigateur Chrome.\n2. Sélectionne 'Ajouter à l'écran d'accueil'.");
             }
         });
     </script>
 </body>
-    </html>
-    
+</html>
